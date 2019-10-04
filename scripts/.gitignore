@@ -1,0 +1,4 @@
+pack/*
+*.deb
+*.tar
+*.tar.gz
