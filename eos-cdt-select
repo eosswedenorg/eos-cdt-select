@@ -5,15 +5,21 @@
 # Simple script to view the currect version and to
 # switch between versions (updating an symlink)
 
-SOURCE_BASE=/opt/eosio.cdt
-TARGET=/usr/local/eosio.cdt
+BASE_DIR=/usr/opt
+VERSION_DIR=${BASE_DIR}/eosio.cdt
+CURRENT=${VERSION_DIR}/current
+CURRENT_VERSION=$(basename $(readlink -f "${CURRENT}"))
+
+function list_versions() {
+	find "${VERSION_DIR}" -type f -wholename "*/LINK" | sort | sed -r 's/.*\/([^/]+)\/LINK$/\1/'
+}
 
 # param <index>
 function name_to_index() {
 
     local cmp=$(($1+0))
     local i=1
-    for v in $(ls ${SOURCE_BASE}) ; do
+    for v in $(list_versions) ; do
        if [ $i -eq $cmp ]; then
           echo -n $v
           break
@@ -26,40 +32,55 @@ function name_to_index() {
 function set_version() {
 
     VERSION=$(name_to_index ${1})
-    SOURCE=${SOURCE_BASE}/${VERSION}
+    LINK=${VERSION_DIR}/${VERSION}/LINK
 
     if [ -z "${VERSION}" ]; then
         echo -e "[\e[31mError\e[0m] Index out of range: ${1}"
         exit 1
     fi
 
-    if [ ! -d "${SOURCE}" ]; then
-        echo -e "[\e[31mError\e[0m] Could not switch to version '${VERSION}': Directory '${SOURCE}' does not exist."
+    if [ ! -f "${LINK}" ]; then
+        echo -e "[\e[31mError\e[0m] Could not switch to version '${VERSION}': Linkfile '${LINK}' is missing."
         exit 1
     fi
 
-    # Update/Create symlink.
-    ln -sfn "${SOURCE}" "${TARGET}"
+    # Check if we have a current version.
+    if [ -f "${CURRENT}/LINK" ]; then
+
+        # Unlink previous links.
+    	for ent in $(cat "${CURRENT}/LINK"); do
+            [[ -L "${BASE_DIR}/${ent}" ]] && rm -f "${BASE_DIR}/${ent}" && echo -e " \e[1m\e[34m*\e[0m ${ent}"
+    	done
+    fi
+
+    # Link new ones.
+    for ent in $(cat "${VERSION_DIR}/${VERSION}/LINK"); do
+	    mkdir -p $(dirname "${BASE_DIR}/${ent}")
+	    ln -sn "${VERSION_DIR}/${VERSION}/${ent}" "${BASE_DIR}/${ent}"
+	    echo -e " \e[1m\e[32m*\e[0m ${ent}"
+    done
+
+    # Update "current" symlink
+    ln -sfn "${VERSION_DIR}/${VERSION}" "${CURRENT}"
 
     if [ $? -ne 0 ]; then
         echo -e "[\e[31mError\e[0m] Could not create/update symlink."
         exit
     fi
 
+    # Done
     echo -e "[\e[32m-\e[0m] Version switched to: \e[33m${VERSION}\e[0m"
 }
 
 function list() {
 
-    CURRENT=$(basename $(readlink -f ${TARGET}))
-
     echo -e "\e[1m\e[32mListing available symlink targets:\e[0m"
 
     local i=1
-    for ver in $(ls ${SOURCE_BASE}) ; do
+    for ver in $(list_versions) ; do
 
         echo -ne "  \e[1m[$i]\e[0m   $ver"
-        if [ "${CURRENT}" == "${ver}" ]; then
+        if [ "${CURRENT_VERSION}" == "${ver}" ]; then
             echo -ne " \e[1m\e[34m*\e[0m"
         fi
         echo -ne "\n"
@@ -69,9 +90,9 @@ function list() {
 }
 
 function show() {
-    LINK=$(readlink -e ${TARGET})
+    LINK=$(readlink -e ${CURRENT})
     if [ -z "${LINK}" ]; then
-       echo -e "Symlink \e[1m${TARGET}\e[0m does not exist."
+       echo -e "Symlink \e[1m${CURRENT}\e[0m does not exist."
     else :
        echo -e "\e[1m\e[32mCurrent symlink points to:\e[0m"
        echo "  ${LINK}"
