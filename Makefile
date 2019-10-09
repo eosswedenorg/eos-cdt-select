@@ -17,6 +17,9 @@ install:
 deb:
 	export PACKAGE_PREFIX=$(PREFIX:/%=%) && scripts/build_deb.sh
 
+changelog:
+	git log --pretty="%s" HEAD..(git tag -l --sort=-creatordate | head -n 1)
+
 clean:
 	$(RM) -fr scripts/pack
 	$(RM) scripts/*.deb

@@ -15,8 +15,9 @@ fi
 
 PACKAGE_FULLNAME="${PACKAGE_NAME}_${PACKAGE_VERSION}-${RELEASE}_amd64"
 
-# Create debian files.
+rm -fr ${BASE_DIR}/${PACKAGE_TMPDIR}
 
+# Create debian files.
 mkdir -p ${BASE_DIR}/${PACKAGE_TMPDIR}/DEBIAN
 echo "Package: ${PACKAGE_NAME}
 Version: ${PACKAGE_VERSION}-${RELEASE}
