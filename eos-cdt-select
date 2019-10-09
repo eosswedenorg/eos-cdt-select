@@ -9,6 +9,21 @@ BASE_DIR=/usr/opt
 VERSION_DIR=${BASE_DIR}/eosio.cdt
 CURRENT=${VERSION_DIR}/current
 CURRENT_VERSION=$(basename $(readlink -f "${CURRENT}"))
+BASH_SOURCE_ARGS=$@
+
+# Gain root access.
+# exists with an error if we can't.
+require_root() {
+    # Already root. exit.
+    [ $EUID -eq 0 ] && return
+
+    # Try executing sudo.
+    SUDO=$(command -v sudo)
+    [[ -x "${SUDO}" ]] && { ${SUDO} -u root "${BASH_SOURCE}" ${BASH_SOURCE_ARGS}; exit $?; }
+
+    # sudo was not available. Give up.
+    echo -e "[\e[31mError\e[0m] Root is required to execute this command."
+}
 
 function list_versions() {
 	find "${VERSION_DIR}" -type f -wholename "*/LINK" | sort | sed -r 's/.*\/([^/]+)\/LINK$/\1/'
@@ -33,6 +48,8 @@ function set_version() {
 
     VERSION=$(name_to_index ${1})
     LINK=${VERSION_DIR}/${VERSION}/LINK
+
+    require_root
 
     if [ -z "${VERSION}" ]; then
         echo -e "[\e[31mError\e[0m] Index out of range: ${1}"
