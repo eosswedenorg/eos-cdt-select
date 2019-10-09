@@ -49,6 +49,12 @@ function set_version() {
     VERSION=$(name_to_index ${1})
     LINK=${VERSION_DIR}/${VERSION}/LINK
 
+    if [ "${CURRENT_VERSION}" = "${VERSION}" ]; then
+        echo -e "[\e[33m#\e[0m] Selected version is already \e[33m${CURRENT_VERSION}\e[0m"
+        echo -e "[\e[33m#\e[0m] Nothing to be done. exiting"
+        exit 0
+    fi
+
     require_root
 
     if [ -z "${VERSION}" ]; then
