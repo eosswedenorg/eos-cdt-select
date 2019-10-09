@@ -3,7 +3,7 @@
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 PACKAGE_NAME=eos-cdt-select
-PACKAGE_VERSION="0.1.0"
+PACKAGE_VERSION="0.1.1"
 PACKAGE_PREFIX=${PACKAGE_PREFIX:-usr/local}
 PACKAGE_DESCRIPTION="Simple script to switch between multiple EOS CDT verions on the same system."
 PACKAGE_TMPDIR="pack"
