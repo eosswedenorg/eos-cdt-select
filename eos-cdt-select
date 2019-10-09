@@ -63,6 +63,7 @@ function set_version() {
 
     # Check if we have a current version.
     if [ -f "${CURRENT}/LINK" ]; then
+        echo -e "[\e[34m-\e[0m] Unlinking version \e[33m${CURRENT_VERSION}\e[0m"
 
         # Unlink previous links.
     	for ent in $(cat "${CURRENT}/LINK"); do
@@ -71,6 +72,7 @@ function set_version() {
     fi
 
     # Link new ones.
+    echo -e "[\e[32m-\e[0m] Linking version \e[33m${VERSION}\e[0m"
     for ent in $(cat "${VERSION_DIR}/${VERSION}/LINK"); do
 	    mkdir -p $(dirname "${BASE_DIR}/${ent}")
 	    ln -sn "${VERSION_DIR}/${VERSION}/${ent}" "${BASE_DIR}/${ent}"
