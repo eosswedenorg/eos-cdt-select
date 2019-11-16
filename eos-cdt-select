@@ -81,7 +81,7 @@ function set_version() {
     echo -e "[\e[32m-\e[0m] Linking version \e[33m${VERSION}\e[0m"
     for ent in $(cat "${VERSION_DIR}/${VERSION}/LINK"); do
 	    mkdir -p $(dirname "${BASE_DIR}/${ent}")
-	    ln -sn "${VERSION_DIR}/${VERSION}/${ent}" "${BASE_DIR}/${ent}"
+	    ln -sfn "${VERSION_DIR}/${VERSION}/${ent}" "${BASE_DIR}/${ent}"
 	    echo -e " \e[1m\e[32m*\e[0m ${ent}"
     done
 
