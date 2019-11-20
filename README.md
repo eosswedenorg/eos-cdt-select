@@ -17,8 +17,8 @@ $ sudo make install
 ### Using .deb on Ubuntu
 
 ```sh
-$ wget https://github.com/eosswedenorg/eos-cdt-select/releases/download/v0.1.2/eos-cdt-select_0.1.2-1_amd64.deb
-$ sudo dpkg -i eos-cdt-select_0.1.2-1_amd64.deb
+$ wget https://github.com/eosswedenorg/eos-cdt-select/releases/download/v0.1.3/eos-cdt-select_0.1.3-1_all.deb
+$ sudo dpkg -i eos-cdt-select_0.1.3-1_all.deb
 ```
 
 Author
