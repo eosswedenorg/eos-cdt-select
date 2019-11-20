@@ -7,7 +7,7 @@
 
 PREFIX := /usr/local
 
-.PHONY: install deb clean
+.PHONY: install deb clean changelog
 
 install:
 	install -D -m 755 -t $(PREFIX)/bin eos-cdt-select
@@ -18,7 +18,7 @@ deb:
 	export PACKAGE_PREFIX=$(PREFIX:/%=%) && scripts/build_deb.sh
 
 changelog:
-	git log --pretty="%s" HEAD..(git tag -l --sort=-creatordate | head -n 1)
+	git log --pretty="%s" `git tag -l --sort=-creatordate | head -n 1`..HEAD
 
 clean:
 	$(RM) -fr scripts/pack
