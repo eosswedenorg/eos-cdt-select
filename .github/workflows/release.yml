@@ -1,0 +1,25 @@
+name: Build release assets
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  upload:
+    name: Upload
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Create package
+        id: package
+        run: |
+          make deb
+          echo ::set-output name=filename::$(find ./scripts -type f -name "*.deb" 2> /dev/null)
+
+      - name: Upload
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: ${{ steps.package.outputs.filename }} application/vnd.debian.binary-package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
