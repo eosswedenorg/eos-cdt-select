@@ -100,6 +100,10 @@ function set_version() {
 
 function list() {
 
+	if [ ! -d "${VERSION_DIR}" ]; then
+		echo -e "[\e[33m#\e[0m] Version directory '${VERSION_DIR}' does not exist \e[0m"
+	fi
+
     echo -e "\e[1m\e[32mListing available symlink targets:\e[0m"
 
     local i=1
