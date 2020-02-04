@@ -5,7 +5,8 @@
 # Simple script to view the currect version and to
 # switch between versions (updating an symlink)
 
-BASE_DIR=/usr/opt
+PREFIX=/usr
+BASE_DIR=${PREFIX}/opt
 VERSION_DIR=${BASE_DIR}/eosio.cdt
 CURRENT=${VERSION_DIR}/current
 CURRENT_VERSION=$(basename $(readlink -f "${CURRENT}"))
@@ -73,15 +74,15 @@ function set_version() {
 
         # Unlink previous links.
     	for ent in $(cat "${CURRENT}/LINK"); do
-            [[ -L "${BASE_DIR}/${ent}" ]] && rm -f "${BASE_DIR}/${ent}" && echo -e " \e[1m\e[34m*\e[0m ${ent}"
+            [[ -L "${PREFIX}/${ent}" ]] && rm -f "${PREFIX}/${ent}" && echo -e " \e[1m\e[34m*\e[0m ${ent}"
     	done
     fi
 
     # Link new ones.
     echo -e "[\e[32m-\e[0m] Linking version \e[33m${VERSION}\e[0m"
     for ent in $(cat "${VERSION_DIR}/${VERSION}/LINK"); do
-	    mkdir -p $(dirname "${BASE_DIR}/${ent}")
-	    ln -sfn "${VERSION_DIR}/${VERSION}/${ent}" "${BASE_DIR}/${ent}"
+	    mkdir -p $(dirname "${PREFIX}/${ent}")
+	    ln -sfn "${VERSION_DIR}/${VERSION}/${ent}" "${PREFIX}/${ent}"
 	    echo -e " \e[1m\e[32m*\e[0m ${ent}"
     done
 
