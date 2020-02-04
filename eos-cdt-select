@@ -13,7 +13,7 @@ CURRENT_VERSION=$(basename $(readlink -f "${CURRENT}"))
 BASH_SOURCE_ARGS=$@
 
 # Gain root access.
-# exists with an error if we can't.
+# exit with an error if we can't.
 require_root() {
     # Already root. exit.
     [ $EUID -eq 0 ] && return
