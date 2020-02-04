@@ -9,7 +9,7 @@ PREFIX=/usr
 BASE_DIR=${PREFIX}/opt
 VERSION_DIR=${BASE_DIR}/eosio.cdt
 CURRENT=${VERSION_DIR}/current
-CURRENT_VERSION=$(basename $(readlink -f "${CURRENT}"))
+CURRENT_VERSION=$(basename $(readlink -f "${CURRENT}") 2> /dev/null)
 BASH_SOURCE_ARGS=$@
 
 # Gain root access.
@@ -27,7 +27,7 @@ require_root() {
 }
 
 function list_versions() {
-	find "${VERSION_DIR}" -type f -wholename "*/LINK" | sort | sed -r 's/.*\/([^/]+)\/LINK$/\1/'
+	find "${VERSION_DIR}" -type f -wholename "*/LINK" 2> /dev/null | sort | sed -r 's/.*\/([^/]+)\/LINK$/\1/'
 }
 
 # param <index>
