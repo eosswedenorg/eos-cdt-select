@@ -2,7 +2,7 @@
 # ---------------------------------------
 #  Makefile for EOS CDT Select
 #
-#  Copyright (c) 2019 EOS Sw/eden
+#  Copyright (c) 2019-2020 EOS Sw/eden
 # ----------------------------------------
 
 PREFIX := /usr/local
