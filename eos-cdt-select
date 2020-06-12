@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2019-2012 EOS Sw/eden
+# Copyright (c) 2019-2020 EOS Sw/eden
 #
 # Simple script to view the currect version and to
 # switch between versions (updating an symlink)
